@@ -1,8 +1,12 @@
 import os
+import sys
 import optparse
 import logging.config
-import ConfigParser
-import simplejson
+if sys.version_info[0] < 3:
+  import ConfigParser
+else:
+  import configparser as ConfigParser
+import json
 import csv
 
 def build_initial_reserve_info(reserve_info_file):
@@ -33,7 +37,7 @@ def build_initial_reserve_info(reserve_info_file):
 
     reserve_file = open(reserve_info_file, "r")
     dict_file = csv.DictReader(reserve_file, delimiter=',', quotechar='"', fieldnames=header_row)
-  except IOError,e:
+  except IOError as e:
     if logger:
       logger.exception(e)
   else:
@@ -58,7 +62,7 @@ def build_initial_reserve_info(reserve_info_file):
         logger.debug("%d reserves info processed" % (len(reserve_info)))
 
       reserve_file.close()
-    except Exception, e:
+    except Exception as e:
       if logger:
         logger.exception(e)
 
@@ -146,13 +150,14 @@ def make_json_file(reserve_data, jsonfullpath):
     if logger:
       logger.debug("Opening JSON file: %s" % (jsonfullpath))
     json_outfile = open(jsonfullpath, "w")
-  except IOError,e:
+  except IOError as e:
     if logger:
       logger.exception(e)
   else:
     reserves = {'reserves':[]}
     reserve_keys = reserve_data.keys()
-    reserve_keys.sort()
+    sorted(reserve_keys)
+    #reserve_keys.sort()
     #We only want to write out the reserves which have data, so check the 3 data types for
     #years, if they are none, do not include reserve in the JSON file.
     for reserve_code in reserve_keys:
@@ -164,7 +169,7 @@ def make_json_file(reserve_data, jsonfullpath):
         reserves['reserves'].append(reserve_info)
     if logger:
       logger.debug("%d of %d reserves have vegetation data." % (len(reserves['reserves']), len(reserve_data)))
-    simplejson.dump(reserves, json_outfile, indent="  ")
+    json.dump(reserves, json_outfile, indent="  ")
     json_outfile.close()
 
   return
@@ -185,7 +190,7 @@ def main():
       logging.config.fileConfig(log_conf_file)
       logger = logging.getLogger("veg_data_logging")
       logger.info("Log file opened.")
-  except ConfigParser.Error, e:
+  except ConfigParser.Error as e:
     print("No log configuration file given, logging disabled.")
 
   try:
@@ -193,7 +198,7 @@ def main():
     parent_dir = configFile.get('data', 'parent_directory')
     json_outpath = configFile.get('data', 'json_outfile')
     reserve_info_file = configFile.get('data', 'reserve_info_file')
-  except ConfigParser.Error, e:
+  except ConfigParser.Error as e:
     if logger:
       logger.exception(e)
   else:
