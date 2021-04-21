@@ -1,7 +1,11 @@
 import os
+import sys
 import optparse
 import logging.config
-import ConfigParser
+if sys.version_info[0] < 3:
+  import ConfigParser
+else:
+  import configparser as ConfigParser
 import zipfile
 import uuid
 from string import Template
@@ -48,7 +52,7 @@ class file_data_lookup(object):
               self.logger.debug("Adding file: %s to zip, zipname: %s" % (file[0], file[1]))
             zip_obj.write(file[0], file[1])
 
-    except Exception,e:
+    except Exception as e:
       if self.logger:
         self.logger.exception(e)
 
@@ -89,7 +93,7 @@ Requested citation format: National Estuarine Research Reserve System (NERRS). 2
       details += details_template.substitute(reserve_code=reserve_code, years=years, data_type=data_type_name)
 
     body = body_template.substitute(url=kwargs['zip_url'], details=details)
-  except Exception,e:
+  except Exception as e:
     if logger:
       logger.exception(e)
   else:
@@ -138,7 +142,7 @@ def main():
       logger = logging.getLogger("veg_request_logger")
       logger.info("Log file opened.")
       logger.info("Reserves Request: %s Email Address: %s" % (options.reservesRequest, options.receiverEmail))
-  except ConfigParser.Error, e:
+  except ConfigParser.Error as e:
     print("No log configuration file given, logging disabled.")
   try:
     #Get the parent directory where the various vegetation sub directories reside.
@@ -156,7 +160,7 @@ def main():
     #Password for the email account.
     email_pwd = configFile.get('email_settings', 'password')
 
-  except ConfigParser.Error, e:
+  except ConfigParser.Error as e:
     if logger:
       logger.exception(e)
   else:
