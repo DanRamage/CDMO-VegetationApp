@@ -44,7 +44,8 @@ class file_data_lookup(object):
     try:
       with zipfile.ZipFile(zip_outfile, "w") as zip_obj:
         for rec in zip_list:
-          reserve_code = rec.keys()
+          #reserve_code = rec.keys()
+          reserve_code = list(rec)
           if self.logger:
             self.logger.debug("Reserve: %s zipping files." %(reserve_code[0]))
           for file in rec[reserve_code[0]]:
@@ -89,7 +90,7 @@ Requested citation format: National Estuarine Research Reserve System (NERRS). 2
   try:
     details = ""
     for reserve_data in kwargs['reserves']:
-      reserve_code,years,data_type_name = reserve_data.split(';')
+      reserve_code,years,data_type_name = reserve_data.split(':')
       details += details_template.substitute(reserve_code=reserve_code, years=years, data_type=data_type_name)
 
     body = body_template.substitute(url=kwargs['zip_url'], details=details)
@@ -135,7 +136,7 @@ def main():
   configFile = ConfigParser.RawConfigParser()
   configFile.read(options.configFile)
   try:
-
+    print("Config: %s Reserves: %s Email: %s" % (options.configFile, options.reservesRequest, options.receiverEmail))
     log_conf_file = configFile.get('logging', 'veg_request_config_file')
     if log_conf_file:
       logging.config.fileConfig(log_conf_file)
@@ -170,7 +171,7 @@ def main():
     #reserve_code;year1,year2,...;data_type~reserve_code2;year1,year2,...;data_type
     reserves = options.reservesRequest.split('~')
     for reserve_data in reserves:
-      reserve_code,years,data_type_name = reserve_data.split(';')
+      reserve_code,years,data_type_name = reserve_data.split(':')
       file_list = reserve_files.get_file_list(data_type_name, reserve_code, years.split(','))
       reserve_info.append({reserve_code: file_list})
 

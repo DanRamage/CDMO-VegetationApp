@@ -62,13 +62,41 @@ variables.data_type="";
 	</cfif>
 </cfloop>
 
+<cfscript>
+    variables.reserve_codes_replaced = replace(#form.reserve_codes#, ";", ":", "all");
+</cfscript>
+<!---
+<cflog
+    text = "#variables.config_file# #variables.reserve_codes_replaced# #form.email_addr#"
+    type = "Informational"
+    file = "cdmo"
+    application = "yes">
+--->
+<cfexecute name="C:\\Windows\\SysWOW64\\cmd.exe"
+			arguments="/c D:\scripts\veg_app\veg_app_handler.bat #variables.config_file# #variables.reserve_codes_replaced# #form.email_addr#"
+			outputFile="d:\\scripts\\logs\\veg_handler.log"
+			errorFile="d:\\scripts\\logs\\veg_handler_error.log"
+			timeout="180">
+</cfexecute>
+
+<cfoutput>
+	#form.first_name#,
 
 
+    thank you for your interest in NERRS vegetation monitoring data.
+    If you do not receive your data request from us within thirty minutes,
+    please verify that you entered your correct email address and check your
+    junk mail folder.  If you still have not received your data request, or
+    have any questions or comments about the website or vegetation monitoring application,
+    please contact us at cdmowebmaster@baruch.sc.edu.
+</cfoutput>
+
+<!---
 <cfexecute name="D:\\python27\\python.exe"
 			arguments="D:\\scripts\\veg_app\\veg_app_request_process.py --ConfigFile=#variables.config_file# --ReservesRequest=#form.reserve_codes# --EmailAddr=#form.email_addr#"
 			outputfile="d:\\scripts\\logs\\veg_handler.log">
 </cfexecute>
-
+--->
 <!---WANT TO CATCH ANY ERRORS INSERTING INFORMATION WRAP IN TRY/CATCH--->
 <cftry>
 
@@ -103,7 +131,7 @@ variables.data_type="";
 	<cfif #form.comments# neq ''>
 		<cfmail to="#form.email_addr#,cdmowebmaster@baruch.sc.edu"
 			from="cdmowebmaster@baruch.sc.edu"
-			subject="[CDMO]Comments on the Vegetation App"
+			subject="[CDMO New Server]Comments on the Vegetation App"
 			type="html">
 			Thank you for leaving the following comments: #form.comments#.
 		</cfmail>
@@ -111,7 +139,7 @@ variables.data_type="";
 
 <!---CATCH ANY EXCEPTION--->
 <cfcatch type="any">
-      <cfmail to="dan@inlet.geol.sc.edu,cdmowebmaster@baruch.sc.edu" from="cdmosupport@baruch.sc.edu" subject="[CDMO] Vegetation App ERROR INSERTING GUEST INFO" type="html">
+      <cfmail to="dan@inlet.geol.sc.edu,cdmowebmaster@baruch.sc.edu" from="cdmosupport@baruch.sc.edu" subject="[CDMO New Server] Vegetation App ERROR INSERTING GUEST INFO" type="html">
 		ERROR:
     	<br />Never inserted guests info:
 		<br />Form entries
@@ -119,7 +147,6 @@ variables.data_type="";
 		<br />Last Name: #form.last_name#
 		<br />Email: #form.email_addr#
 		<br />Reserves: #reserve_codes#
-		<br />Years: #reserve_years_requested#
 		<br />Occupation: #form.occupation#
 		<br />Organization: #form.organization#
 		<br />Purpose: #form.purpose#
@@ -133,14 +160,3 @@ variables.data_type="";
 </cftry>
 <!---END TRY--->
 
-<cfoutput>
-	#form.first_name#,
-
-
-    thank you for your interest in NERRS vegetation monitoring data.
-    If you do not receive your data request from us within thirty minutes,
-    please verify that you entered your correct email address and check your
-    junk mail folder.  If you still have not received your data request, or
-    have any questions or comments about the website or vegetation monitoring application,
-    please contact us at cdmowebmaster@baruch.sc.edu.
-</cfoutput>
