@@ -235,10 +235,33 @@ function send_receive_view(parent_model_view)
   self.first_name = ko.observable("");
   self.last_name = ko.observable("");
   self.email_addr = ko.observable("");
+  self.email_addr_validate = ko.observable("");
   self.organization = ko.observable("");
   self.occupation = ko.observable("");
   self.purpose = ko.observable("");
   self.comments = ko.observable("");
+  //We want to remove the carriage return/line feeds from the comments field as well as
+  //limit the number of characters to 255.
+  self.comments_cleaned = ko.computed(
+  {
+    read: function() {
+      var temp = this.comments().toString().replace(/[\r\n]+/gm, " ");
+      this.comments(temp);
+
+      if (temp.length > 255) {
+        temp = temp.substring(0, 255);
+        this.comments(temp);
+      }
+
+      //console.log("read: Comments" + " " + this.comments());
+      return self.comments()
+    },
+    write: function(value) {
+      self.comments(value);
+      //console.log("write: Comments" + " " + this.comments());
+    },
+    owner: this
+  });
   $(document).ready(function() {
     $('#use_data').validator({disable: false,
                               input_group: '.form-input-group'});
@@ -343,6 +366,15 @@ function send_receive_view(parent_model_view)
         return(false);
 
       }
+      if(self.email_addr() != self.email_addr_validate())
+      {
+        self.parent_model_view.popup_title("Request Failed");
+        self.parent_model_view.popup_message("Your email and email confirm fields do not match.");
+        $('#message_popup').modal("show");
+        return(false);
+
+      }
+
       var post_data = $('#use_data').serialize();
       var reserve_rec = "";
       $.each(user_selection, function(ndx, reserve) {

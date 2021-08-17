@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <title>Vegetation App</title>
+    <title>Vegetation App | Centralized Data Management Office</title>
+
+	      <link href="/core-components/styles.css?v=1.9" rel="stylesheet" type="text/css">
+
+	<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 
     <!-- Bootstrap core CSS -->
     <link href="../resources/js/bootstrap/bootstrap-3.3.4/css/bootstrap.min.css" rel="stylesheet">
@@ -22,7 +24,7 @@
     <script type="application/javascript" src="../resources/js/knockout/knockout-3.2.0.js"></script>
     <script type="application/javascript" src="../resources/js/bootstrap/bootstrap-validator/validator.js"></script>
     <script type="application/javascript" src="../resources/js/bootstrap/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
-    <script type="application/javascript" src="view_models.js"></script>
+    <script type="application/javascript" src="view_models_test.js"></script>
 
     <!--
     <a href='javascript:(function(){var s=document.createElement("script");s.onload=function(){bootlint.showLintReportForCurrentDocument([]);};s.src="https://maxcdn.bootstrapcdn.com/bootlint/latest/bootlint.min.js";document.body.appendChild(s)})();'>Bootlint</a>
@@ -65,7 +67,7 @@
       .middle-column {
         display: table-cell;
         /*padding: 10px;*/
-        width: 972px;
+        width: 942px;
         vertical-align: top;
       }
       .tab-content {
@@ -226,11 +228,17 @@
       .form-group-no-row {
         display: none;
       }
+		html,body {background-color: transparent;}
     </style>
 
   </head>
 
   <body>
+	   <div id="main-wrapper">
+
+            <cfinclude template="/core-components/header.cfm">
+
+            <div id="content-wrapper">
     <div id="veg_app" class="app_container">
     <!--
     <div id="veg_app" class="container">
@@ -241,25 +249,8 @@
         </div>
         <div class="middle-column">
           <div class="">
-            <div class="row header_row">
-              <div class="col-xs-12 header_column">
-                <img src="../revamp/banner_top.jpg">
-                <!--
-                <div class="page-header">
-                  <img src="../revamp/banner_top.jpg">
-                </div>
-                -->
-              </div>
-            </div>
             <div class="row app_body_row">
               <div class="col-xs-12">
-                <div class="row">
-                  <div class="col-xs-12 cdmo_menu_col">
-                    <!-- Menu which is dynamically loaded below in the scripting section-->
-                    <div id="cdmo_menu_div" class="cdmo_menu">
-                    </div>
-                  </div>
-                </div>
                 <div class="row">
                   <div class="col-xs-12">
                     <div class="col-xs-1"></div>
@@ -551,7 +542,7 @@
                                 <div class="form-group">
                                   <label class="col-xs-2 control-label" for="comments">Comments:</label>
                                   <div class="col-xs-8 col-centered">
-                                    <textarea data-bind="value: comments" name="comments" class="form-control" rows="3"></textarea>
+                                    <textarea data-bind="value: comments_cleaned" name="comments" class="form-control" rows="3"></textarea>
                                   </div>
                                   <!-- This is just a placeholder to pad out the centering for this input -->
                                   <div class="col-xs-4 col-centered"></div>
@@ -571,39 +562,6 @@
                     <div class="col-xs-1"></div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="row bg_row">
-              <div class="col-xs-12 bg_foot">
-                <table>
-                  <tr class="bg_foot">
-                    <td valign="middle" class="bg_foot_left">
-                      <a target="_blank" class="bg_foot_left" href="http://www.commerce.gov/">
-                        <span class="bottom">Department of Commerce</span>
-                      </a> |
-                      <a target="_blank" class="bg_foot_left" href="http://www.noaa.gov/">
-                        <span class="bottom">NOAA</span></a> |
-                      <a target="_blank" class="bg_foot_left" href="http://oceanservice.noaa.gov/">
-                        <span class="bottom">National Ocean Service</span>
-                      </a> |
-                      <a target="_blank" class="bg_foot_left" href="http://coastalmanagement.noaa.gov/">
-                        <span class="bottom">Ocean and Coastal Resource Management</span>
-                      </a> |
-                      <a target="_blank" class="bg_foot_left" href="http://nerrs.noaa.gov/">
-                        <span class="bottom">NERRS</span>
-                      </a> |
-                      <a class="bg_foot_left" href="mailto:cdmowebmaster@baruch.sc.edu?subject=CDMO Site Inquiry">
-                        <span class="bottom">Webmaster</span></a>
-                      <br>
-                        <span class="bottom">
-                          Site hosted by NOAA National Estuarine Research Reserve, Centralized Data Management
-                        Office.
-                        </span>
-                      <br>
-                    </td>
-                    <td align="right" class="bg_logo_trans"></td>
-                  </tr>
-                </table>
               </div>
             </div>
           </div>
@@ -732,6 +690,9 @@
       app.initialize();
 
     </script>
+            </div>
 
+            <cfinclude template="/core-components/footer.cfm">
+        </div>
   </body>
 </html>
