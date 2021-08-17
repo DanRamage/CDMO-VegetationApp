@@ -24,7 +24,7 @@
     <script type="application/javascript" src="../resources/js/knockout/knockout-3.2.0.js"></script>
     <script type="application/javascript" src="../resources/js/bootstrap/bootstrap-validator/validator.js"></script>
     <script type="application/javascript" src="../resources/js/bootstrap/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
-    <script type="application/javascript" src="view_models_test.js"></script>
+    <script type="application/javascript" src="view_models.js"></script>
 
     <!--
     <a href='javascript:(function(){var s=document.createElement("script");s.onload=function(){bootlint.showLintReportForCurrentDocument([]);};s.src="https://maxcdn.bootstrapcdn.com/bootlint/latest/bootlint.min.js";document.body.appendChild(s)})();'>Bootlint</a>
